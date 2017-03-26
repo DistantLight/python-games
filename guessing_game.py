@@ -9,31 +9,29 @@ curses.cbreak() # React to keys instantly, without requiring the Enter key to be
 
 def main():
     """ Main entry point """
-
+    guess_number = None
+    secret_number = None
 
     STDSCR.clear()
-
-    STDSCR.addstr('Guess a number: ')
     char = ''
+
     while 1:
         STDSCR.addstr(0, 0, 'Guess a number ... ')
-        try:
+        if guess_number and secret_number:
             STDSCR.addstr(1, 0, 'You guessed %d, the secret number was %d\n' % (guess_number, secret_number))
-        except:
-            pass
+            if guess_number == secret_number:
+                STDSCR.addstr(2, 0, 'YOU WIN!!!')
+
         secret_number = int(uniform(1, 9))
         char = STDSCR.getkey()
+
         STDSCR.clear()
+
         try:
             guess_number = int(char)
         except ValueError:
+            guess_number = None
             continue
-
-
-    # SCREEN.refresh()
-    # if secret_number == guess_number:
-    #     SCREEN.addstr(0, 0, 'YOU WIN!!!')
-    #     exit()
 
 if __name__ == '__main__':
     try:
