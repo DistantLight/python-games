@@ -1,6 +1,9 @@
 """ This is a guessing game. Guess the number between 1 and 9 """
 from random import uniform
 import curses
+from os import environ
+environ['LINES'] = '10'
+environ['COLUMNS'] = '80'
 
 STDSCR = curses.initscr() # Initialize curses screen
 STDSCR.keypad(True) # Enable keypad mode to return special keys, such as the cursor keys
@@ -20,7 +23,12 @@ def main():
         if guess_number and secret_number:
             STDSCR.addstr(1, 0, 'You guessed %d, the secret number was %d\n' % (guess_number, secret_number))
             if guess_number == secret_number:
-                STDSCR.addstr(2, 0, 'YOU WIN!!!')
+                line_num = 2
+                with open('win_ascii.txt', 'r') as handle:
+                    text = handle.read()
+                    for line in text.splitlines():
+                        STDSCR.addstr(line_num, 0, line)
+                        line_num += 1
 
         secret_number = int(uniform(1, 9))
         char = STDSCR.getkey()
@@ -34,6 +42,7 @@ def main():
             continue
 
 if __name__ == '__main__':
+    curses.resizeterm(10, 80)
     try:
         main()
     except:
